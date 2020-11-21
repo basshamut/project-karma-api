@@ -1,0 +1,22 @@
+spring:
+  resources:    add-mappings: true
+  datasource:
+#    driverClassName: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/karma_db?autoReconnect=true&useSSL=false
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:karma_db
+    username: root
+    password: sep11Jes
+  h2:
+    console:
+      enabled: true
+      path: /console
+  jpa:
+    hibernate.ddl-auto: create
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+  banner:
+    location: classpath:banner.txt
+server:
+  port: 8082
