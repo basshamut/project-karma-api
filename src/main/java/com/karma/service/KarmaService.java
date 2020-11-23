@@ -61,7 +61,7 @@ public class KarmaService {
 
 		name = name.toLowerCase().replaceAll("\\s+", "");
 		for(int ind = 0;  ind < name.length() ; ind++) {
-			numericFrecuence = this.getNumericFrequence(numericFrecuence, name.substring(ind, ind+1));
+			this.getNumericFrequence(numericFrecuence, name.substring(ind, ind+1));
 		}
 
 		Integer value;
@@ -79,17 +79,6 @@ public class KarmaService {
 	public DataDTO findAll() {
 		List<Karma> karmas = (List<Karma>) karmaRepository.findAll();
 		return new DataDTO(KarmaMapper.makeKarmaDTOList(karmas));
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public DataDTO findKarmaById(int id){
-		Karma karma = null;
-		try {
-    		karma = karmaRepository.findKarmaById(id);        	
-        }catch (Exception e) {
-			throw new ServiceException();
-		}
-		return new DataDTO(KarmaMapper.makeKarmaDTO(karma));
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

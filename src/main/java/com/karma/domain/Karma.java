@@ -62,7 +62,7 @@ public class Karma {
 
     @Override
     public String toString() {
-        return "KarmaTO [id=" + id + ", number=" + number + ", missing=" + missing + ", situation=" + situation
+        return "Karma [id=" + id + ", number=" + number + ", missing=" + missing + ", situation=" + situation
                 + ", improve=" + improve + "]";
     }
 }
