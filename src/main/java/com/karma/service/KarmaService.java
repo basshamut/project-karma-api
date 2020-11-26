@@ -3,6 +3,7 @@ package com.karma.service;
 import com.karma.controller.mapper.KarmaMapper;
 import com.karma.domain.Karma;
 import com.karma.dto.DataDTO;
+import com.karma.dto.KarmaDTO;
 import com.karma.exceptions.ServiceException;
 import com.karma.repository.KarmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,101 +13,103 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.karma.util.Constants.NOT_FOUND_CODE;
+import static com.karma.util.Constants.NOT_FOUND_MESSAGE;
+
 @Component("karmaService")
 public class KarmaService {
 
-	@Autowired
-	private KarmaRepository karmaRepository;
+    @Autowired
+    private KarmaRepository karmaRepository;
 
+    public DataDTO<List<KarmaDTO>> findAll() {
+        List<Karma> karmas = karmaRepository.findAll();
+        return new DataDTO<>(KarmaMapper.makeKarmaDTOList(karmas));
+    }
 
-	/*
-	 * This method returns the base table (pythagorean table) main.karma.to obtain the number of repetitions of each letter
-	 */
-	private HashMap<String, Integer> getPythagoreanTable() {
-		HashMap<String, Integer> letters = new HashMap<>();
-		letters.put("a", 1); letters.put("j", 1); letters.put("s", 1);
-		letters.put("b", 2); letters.put("k", 2); letters.put("t", 2);
-		letters.put("c", 3); letters.put("l", 3); letters.put("u", 3);
-		letters.put("d", 4); letters.put("m", 4); letters.put("v", 4);
-		letters.put("e", 5); letters.put("n", 5); letters.put("w", 5);
-		letters.put("f", 6); letters.put("o", 6); letters.put("x", 6);
-		letters.put("g", 7); letters.put("p", 7); letters.put("y", 7);
-		letters.put("h", 8); letters.put("q", 8); letters.put("z", 8);
-		letters.put("i", 9); letters.put("r", 9);
-		return letters;
-	}
+    public DataDTO<KarmaDTO> findKarmaByNumber(final int number) {
+        return new DataDTO<>(KarmaMapper.makeKarmaDTO(karmaRepository.findKarmaByNumber(number)
+                .orElseThrow(() -> new ServiceException(NOT_FOUND_MESSAGE, NOT_FOUND_CODE))));
+    }
 
-	/*
-	 * This method returns the count of each letter of the name based on the pythagorean table
-	 */
-	private HashMap<Integer, Integer> getNumericFrequence(HashMap<Integer, Integer> numericFrecuence, String letterName){
-		HashMap<String, Integer> pitagoricTable = getPythagoreanTable();
-		Integer numericLetter = pitagoricTable.get(letterName);
-		Integer value = numericFrecuence.get(numericLetter);
-		if(value == null) {
-			value = 1;
-			numericFrecuence.put(numericLetter, value);
-		}else {
-			numericFrecuence.put(numericLetter, value + 1);
-		}
-		return numericFrecuence;
-	}
+    public DataDTO<List<KarmaDTO>> processName(final String name) {
+        final List<Karma> karmas = new ArrayList<>();
+        final HashMap<Integer, Integer> numericFrecuence = process(name);
+        for (int ind = 1; ind < 10; ind++) {
+            if (numericFrecuence.get(ind) == 0) {
+                karmaRepository.findKarmaByNumber(ind).ifPresent(karmas::add);
+            }
+        }
+        return new DataDTO<>(KarmaMapper.makeKarmaDTOList(karmas));
+    }
 
-	/*
-	 *This method process the name. First format the string without spaces and transform all in lower case, then count the repetitions
-	 *for each letter and generate a map with the result
-	 */
-	private HashMap<Integer, Integer> process(String name) {
-		HashMap<Integer, Integer> numericFrecuence = new HashMap<>();
+    private HashMap<Integer, Integer> process(final String name) {
+        final String nameFormatted = getNameFormatted(name);
+        return getLetterCountInName(nameFormatted);
+    }
 
-		name = name.toLowerCase().replaceAll("\\s+", "");
-		for(int ind = 0;  ind < name.length() ; ind++) {
-			this.getNumericFrequence(numericFrecuence, name.substring(ind, ind+1));
-		}
+    private HashMap<Integer, Integer> getLetterCountInName(String nameFormatted) {
+        final HashMap<Integer, Integer> numericFrecuence = createNumericFrecuenceMap(nameFormatted);
+        return fillNumericFrecuenceMap(numericFrecuence);
+    }
 
-		Integer value;
-		for(int ind = 1; ind < 10 ; ind++) {
-			value = numericFrecuence.get(ind);
-			if(value == null) {
-				numericFrecuence.put(ind, 0);
-			}
-		}
+    private String getNameFormatted(String name) {
+        return name.toLowerCase().replaceAll("\\s+", "");
+    }
 
-		return numericFrecuence;
-	}
+    private HashMap<Integer, Integer> createNumericFrecuenceMap(String nameFormatted) {
+        final HashMap<Integer, Integer> numericFrecuence = new HashMap<>();
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public DataDTO findAll() {
-		List<Karma> karmas = (List<Karma>) karmaRepository.findAll();
-		return new DataDTO(KarmaMapper.makeKarmaDTOList(karmas));
-	}
+        for (int ind = 0; ind < nameFormatted.length(); ind++) {
+            this.getNumericFrequence(numericFrecuence, nameFormatted.substring(ind, ind + 1));
+        }
+        return numericFrecuence;
+    }
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public DataDTO findKarmaByNumber(int number){
-		Karma karma = null;
-		try {
-			karma =  karmaRepository.findKarmaByNumber(number);
-        }catch (Exception e) {
-			throw new ServiceException();
-		}
-		return new DataDTO(KarmaMapper.makeKarmaDTO(karma));
-	}
+    private HashMap<Integer, Integer> fillNumericFrecuenceMap(final HashMap<Integer, Integer> numericFrecuence) {
+        for (int ind = 1; ind < 10; ind++) {
+            numericFrecuence.putIfAbsent(ind, 0);
+        }
+        return numericFrecuence;
+    }
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public DataDTO processName(String name){
-		Karma karma;
-		List<Karma> karmas = new ArrayList<>();
-		HashMap<Integer, Integer> numericFrecuence = process(name);
-		try {
-			for(int ind = 1; ind < 10 ; ind++) {
-				if(numericFrecuence.get(ind) == 0){
-					karma = karmaRepository.findKarmaByNumber(ind);
-					karmas.add(karma);
-				}
-			}
-        }catch (Exception e) {
-			throw new ServiceException();
-		}
-		return new DataDTO(KarmaMapper.makeKarmaDTOList(karmas));
-	}
+    private void getNumericFrequence(final HashMap<Integer, Integer> numericFrecuence, final String letterName) {
+        final HashMap<String, Integer> pitagoricTable = getPythagoreanTable();
+        final Integer numericLetter = pitagoricTable.get(letterName);
+
+        numericFrecuence.merge(numericLetter, 1, Integer::sum);
+
+    }
+
+    private HashMap<String, Integer> getPythagoreanTable() {
+        final HashMap<String, Integer> letters = new HashMap<>();
+        letters.put("a", 1);
+        letters.put("j", 1);
+        letters.put("s", 1);
+        letters.put("b", 2);
+        letters.put("k", 2);
+        letters.put("t", 2);
+        letters.put("c", 3);
+        letters.put("l", 3);
+        letters.put("u", 3);
+        letters.put("d", 4);
+        letters.put("m", 4);
+        letters.put("v", 4);
+        letters.put("e", 5);
+        letters.put("n", 5);
+        letters.put("w", 5);
+        letters.put("f", 6);
+        letters.put("o", 6);
+        letters.put("x", 6);
+        letters.put("g", 7);
+        letters.put("p", 7);
+        letters.put("y", 7);
+        letters.put("h", 8);
+        letters.put("q", 8);
+        letters.put("z", 8);
+        letters.put("i", 9);
+        letters.put("r", 9);
+        return letters;
+    }
+
 }

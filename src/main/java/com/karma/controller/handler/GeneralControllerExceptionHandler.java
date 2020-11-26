@@ -13,14 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 @RestControllerAdvice
 public class GeneralControllerExceptionHandler {
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ExceptionHandler(value = {ServiceException.class})
     @ResponseBody
-    public DataDTO handleServiceException(ServiceException e, HttpServletResponse response) {
+    public DataDTO<ErrorDTO> handleServiceException(ServiceException e, HttpServletResponse response) {
         ErrorDTO errorDTO = new ErrorDTO();
-        errorDTO.setCode(Integer.toString(HttpStatus.BAD_REQUEST.value()) + "-Service");
-        errorDTO.setMessage(HttpStatus.BAD_REQUEST.getReasonPhrase());
-        DataDTO dataDTO = new DataDTO();
+        errorDTO.setCode(e.getCode().toString());
+        errorDTO.setMessage(e.getMessage());
+        DataDTO<ErrorDTO> dataDTO = new DataDTO<>();
         dataDTO.setData(errorDTO);
         return dataDTO;
     }

@@ -1,9 +1,17 @@
 package com.karma.controller;
 
 import com.karma.dto.DataDTO;
+import com.karma.dto.KarmaDTO;
 import com.karma.service.KarmaService;
+import com.karma.util.anotations.validators.OnlyLetters;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotBlank;
+
+import java.util.List;
 
 import static com.karma.util.Constants.URL_KARMA_SERVICE;
 
@@ -14,6 +22,7 @@ import static com.karma.util.Constants.URL_KARMA_SERVICE;
              exposedHeaders="header1",
              allowCredentials= "false")
 @RequestMapping(value = URL_KARMA_SERVICE)
+@Validated
 public class KarmaController {
 
     @Autowired
@@ -21,22 +30,19 @@ public class KarmaController {
 
 	@GetMapping("/")
     @ResponseBody
-    @SuppressWarnings("rawtypes")
-    public DataDTO findAll() {
+    public DataDTO<List<KarmaDTO>> findAll() {
         return karmaService.findAll();
     }
 
     @GetMapping("/{name}/study")
     @ResponseBody
-    @SuppressWarnings("rawtypes")
-    public DataDTO processName(@PathVariable(value = "name") String name) {
+    public DataDTO<List<KarmaDTO>> processName(@NotNull @NotBlank @OnlyLetters @PathVariable(value = "name") String name) {
         return karmaService.processName(name);
     }
 
     @GetMapping("/{number}")
     @ResponseBody
-    @SuppressWarnings("rawtypes")
-    public DataDTO findKarmaByNumber(@PathVariable(value = "number") int number) {
+    public DataDTO<KarmaDTO> findKarmaByNumber(@PathVariable(value = "number") int number) {
         return karmaService.findKarmaByNumber(number);
     }
 }
