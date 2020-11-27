@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorDTO {
-    private String Code;
-    private String Message;
+    private String Code = "";
+    private String Message= "";
 
     public String getCode() {
         return Code;
