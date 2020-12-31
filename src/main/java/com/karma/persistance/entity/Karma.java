@@ -1,4 +1,4 @@
-package com.karma.domain;
+package com.karma.persistance.entity;
 
 import javax.persistence.*;
 

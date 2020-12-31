@@ -1,11 +1,11 @@
 package com.karma.service;
 
-import com.karma.controller.mapper.KarmaMapper;
-import com.karma.domain.Karma;
-import com.karma.dto.DataDTO;
-import com.karma.dto.KarmaDTO;
+import com.karma.service.mapper.KarmaMapper;
+import com.karma.persistance.entity.Karma;
+import com.karma.service.mapper.dto.DataDTO;
+import com.karma.service.mapper.dto.KarmaDTO;
 import com.karma.exceptions.ServiceException;
-import com.karma.repository.KarmaRepository;
+import com.karma.persistance.repository.KarmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

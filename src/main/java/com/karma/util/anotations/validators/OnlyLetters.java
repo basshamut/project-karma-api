@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = LettersValidator.class)
 public @interface OnlyLetters {
 
-    String message() default Constants.BAD_REQUEST_INVALID_INPUT_ONLY_LETTERS_MUST_BE_MATCHED;
+    String message() default Constants.BAD_REQUEST_ONLY_LETTERS_MUST_BE_MATCHED;
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 }

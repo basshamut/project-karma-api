@@ -1,6 +1,5 @@
 package com.karma.util.anotations.validators;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -14,7 +13,7 @@ public abstract class StringPatternValidator {
     }
 
     public boolean isValid(final String stringToCheck) {
-        if(stringToCheck == null) {
+        if(stringToCheck == null || "".equals(stringToCheck.trim())) {
             return false;
         }
         try {

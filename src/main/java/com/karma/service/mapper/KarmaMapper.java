@@ -1,12 +1,12 @@
-package com.karma.controller.mapper;
+package com.karma.service.mapper;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.karma.domain.Karma;
-import com.karma.dto.KarmaDTO;
+import com.karma.persistance.entity.Karma;
+import com.karma.service.mapper.dto.KarmaDTO;
 
 public class KarmaMapper {
     public static Karma makeKarma(KarmaDTO karmaDTO) {

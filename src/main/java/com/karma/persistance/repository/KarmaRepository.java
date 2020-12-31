@@ -1,6 +1,6 @@
-package com.karma.repository;
+package com.karma.persistance.repository;
 
-import com.karma.domain.Karma;
+import com.karma.persistance.entity.Karma;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
