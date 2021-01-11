@@ -1,4 +1,4 @@
-package com.karma.service;
+package com.karma;
 
 public class ServiceMainTests {
 

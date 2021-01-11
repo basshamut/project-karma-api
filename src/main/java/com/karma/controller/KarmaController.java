@@ -42,8 +42,15 @@ public class KarmaController {
 
 	@GetMapping("/")
     @ResponseBody
-    public DataDTO<List<KarmaDTO>> findAll() {
-        return karmaService.findAll();
+    public ResponseEntity<DataDTO<List<KarmaDTO>>> findAll() {
+        final DataDTO<List<KarmaDTO>> dataDTO = karmaService.findAll();
+
+        dataDTO.setCode(String.valueOf(HttpStatus.OK.value()));
+        dataDTO.setMessage(HttpStatus.OK.name());
+
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(MAX_AGE, TimeUnit.SECONDS).cachePublic())
+                .body(dataDTO);
     }
 
     @GetMapping("/study")
