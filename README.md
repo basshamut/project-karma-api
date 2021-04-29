@@ -1,2 +1,2 @@
 # project-karma-api
-API that process names and bring a karma study
+API that process names and bring a karma study using names
