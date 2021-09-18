@@ -4,16 +4,12 @@ import com.karma.service.mapper.dto.DataDTO;
 import com.karma.service.mapper.dto.KarmaDTO;
 import com.karma.service.KarmaService;
 import com.karma.util.anotations.validators.OnlyLetters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -34,11 +30,6 @@ public class KarmaController {
 
     @Autowired
     private KarmaService karmaService;
-
-    @Autowired
-    private HttpServletResponse response;
-
-    private Logger logger = LoggerFactory.getLogger(KarmaController.class);
 
 	@GetMapping("/")
     @ResponseBody
