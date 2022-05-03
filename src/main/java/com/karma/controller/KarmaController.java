@@ -63,4 +63,12 @@ public class KarmaController {
         return karmaService.findKarmaByNumber(number);
     }
 
+    @RequestMapping("/date")
+    @ResponseBody
+    public ResponseEntity<DataDTO> processDate(@RequestParam(value = "day") String day,
+                                               @RequestParam(value = "month") String month,
+                                               @RequestParam(value = "year") String year){
+
+
+    }
 }

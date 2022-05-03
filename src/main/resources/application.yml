@@ -8,5 +8,5 @@ spring:
   banner:
     location: classpath:banner.txt
   profiles:
-    active: local
-#    active: heroku
+ #   active: local
+    active: heroku
