@@ -1,6 +1,6 @@
 package com.karma.persistance.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="birthmounth")

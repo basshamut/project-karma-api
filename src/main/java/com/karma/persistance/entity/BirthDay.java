@@ -1,6 +1,6 @@
 package com.karma.persistance.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "birthday")
@@ -13,6 +13,7 @@ public class BirthDay {
     private String simbolType;
     private String sexInPast;
     private String location;
+    @Column(name = "birth_day")
     private String day;
     private String currentSex;
 

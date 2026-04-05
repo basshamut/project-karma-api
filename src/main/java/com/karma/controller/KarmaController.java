@@ -52,8 +52,8 @@ public class KarmaController {
         dataDTO.setCode(String.valueOf(HttpStatus.OK.value()));
         dataDTO.setMessage(HttpStatus.OK.name());
 
-	    return ResponseEntity.ok()
-                .cacheControl(CacheControl.maxAge(MAX_AGE, TimeUnit.SECONDS).cachePublic())
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.noStore())
                 .body(dataDTO);
     }
 

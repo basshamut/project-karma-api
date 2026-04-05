@@ -9,6 +9,7 @@ import com.karma.persistance.repository.KarmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +55,9 @@ public class KarmaService {
     }
 
     private String getNameFormatted(String name) {
-        return name.toLowerCase().replaceAll("\\s+", "");
+        String normalized = Normalizer.normalize(name.toLowerCase(), Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        return normalized.replaceAll("\\s+", "");
     }
 
     private HashMap<Integer, Integer> createNumericFrecuenceMap(String nameFormatted) {
