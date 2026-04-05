@@ -34,3 +34,13 @@ spring:
     console:
       enabled: ${H2_CONSOLE_ENABLED:false}
       path: ${H2_CONSOLE_PATH:/h2-console}
+
+# Actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
