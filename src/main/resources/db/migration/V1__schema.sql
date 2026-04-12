@@ -46,3 +46,18 @@ CREATE TABLE encarnationlocation (
     location      VARCHAR(255),
     location_name VARCHAR(255)
 );
+
+CREATE TABLE profession_lookup (
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    code               VARCHAR(10)   NOT NULL,
+    description_male   VARCHAR(500),
+    description_female VARCHAR(500)
+);
+
+CREATE TABLE personality_lookup (
+    id               INT AUTO_INCREMENT PRIMARY KEY,
+    simbol_code      VARCHAR(10)  NOT NULL,
+    simbol_name      VARCHAR(100),
+    description_odd  VARCHAR(500),
+    description_even VARCHAR(500)
+);

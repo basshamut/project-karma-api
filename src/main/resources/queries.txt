@@ -1,3 +1,75 @@
-SELECT * FROM BIRTHYEAR WHERE CURRENT_SEX = 'M' AND YEAR_PREFFIX = '198' AND YEAR_SUFFIX = '4'
-SELECT * FROM BIRTHMOUNTH WHERE CURRENT_SEX = 'M' AND MOUNTH  = 'SEPTIEMBRE' AND LETTER_CODE = 'HH'
-SELECT * FROM BIRTHDAY WHERE  CURRENT_SEX = 'M' AND SEX_IN_PAST = 'M' AND SIMBOL_TYPE = 'CCCC' AND DAY = '11'
+-- ============================================================
+-- FLUJO COMPLETO DE REENCARNACIÓN
+-- Ejemplo: Hombre nacido el 11 de Septiembre de 1984
+-- ============================================================
+
+-- PASO 1: Código del año de nacimiento
+-- Input: año partido (prefijo + sufijo) + sexo actual
+-- Output: LETTER_CODE → se usa en PASO 2
+SELECT * FROM BIRTHYEAR
+WHERE CURRENT_SEX = 'M'
+  AND YEAR_PREFFIX = '198'
+  AND YEAR_SUFFIX = '4';
+
+-- PASO 2: Datos del mes de nacimiento
+-- Input: mes + LETTER_CODE (del PASO 1) + sexo actual
+-- Output: PROFESION, SIMBOL_TYPE, ORIENTATION_TYPE, LETTER_CODE, SEX_IN_PAST → se usan en PASOS 3, 4, 6 y 7
+SELECT * FROM BIRTHMOUNTH
+WHERE CURRENT_SEX = 'M'
+  AND MOUNTH = 'SEPTIEMBRE'
+  AND LETTER_CODE = 'HH';
+
+-- PASO 3: Datos del día de nacimiento
+-- Input: día + SIMBOL_TYPE (del PASO 2) + sexo actual + SEX_IN_PAST (del PASO 2)
+-- Output: LOCATION → se usa en PASO 5
+-- NOTA: la columna en schema es BIRTH_DAY, no DAY
+SELECT * FROM BIRTHDAY
+WHERE CURRENT_SEX = 'M'
+  AND SEX_IN_PAST = 'M'
+  AND SIMBOL_TYPE = 'CCCC'
+  AND BIRTH_DAY = '11';
+
+-- PASO 4: Año aproximado de la encarnación anterior
+-- Input: ORIENTATION_TYPE + LETTER_CODE (ambos del PASO 2)
+-- Output: YEAR_ENCARNATION → año en que vivió la vida anterior
+SELECT * FROM ENCARNATIONDATE
+WHERE ORIENTATION_TYPE = 'AAA'
+  AND LETTER_CODE = 'W';
+
+-- PASO 5: País/región de la encarnación anterior
+-- Input: LOCATION (del PASO 3)
+-- Output: LOCATION_NAME → nombre del país o región donde vivió antes
+SELECT * FROM ENCARNATIONLOCATION
+WHERE LOCATION = '46';
+
+-- PASO 6: Descripción de la profesión anterior
+-- Input: PROFESION code (del PASO 2) + SEX_IN_PAST (del PASO 2)
+-- Output: DESCRIPTION_MALE o DESCRIPTION_FEMALE según el sexo en la vida pasada
+SELECT
+    CODE,
+    CASE
+        WHEN 'M' = 'M' THEN DESCRIPTION_MALE
+        ELSE DESCRIPTION_FEMALE
+    END AS PROFESION_DESCRIPCION
+FROM PROFESSION_LOOKUP
+WHERE CODE = '2-3';
+
+-- PASO 7: Descripción de la personalidad anterior
+-- Input: SIMBOL_TYPE code (del PASO 2) + paridad del día de nacimiento
+-- Output: DESCRIPTION_ODD (día impar) o DESCRIPTION_EVEN (día par)
+-- Día 11 → impar → DESCRIPTION_ODD
+SELECT
+    SIMBOL_CODE,
+    SIMBOL_NAME,
+    CASE
+        WHEN (11 % 2) != 0 THEN DESCRIPTION_ODD
+        ELSE DESCRIPTION_EVEN
+    END AS PERSONALIDAD_DESCRIPCION
+FROM PERSONALITY_LOOKUP
+WHERE SIMBOL_CODE = 'CCCC';
+
+-- PASO 8: Números kármicos ausentes (deuda kármica)
+-- Input: nombre completo procesado con tabla pitagórica → números del 1 al 9 ausentes
+-- La lógica de cálculo está en KarmaService.java (processName)
+-- Output: descripción de lo que faltó desarrollar en vidas pasadas
+SELECT * FROM KARMA WHERE NUMBER IN (/* números ausentes calculados por KarmaService */);
