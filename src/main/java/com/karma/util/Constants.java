@@ -1,8 +1,8 @@
 package com.karma.util;
 
 public class Constants {
-    public static final String URL_KARMA_SERVICE = "karma-api/v1/karmas";
-    public static final String URL_PAST_LIFE_SERVICE = "karma-api/v1/past-life";
+    public static final String URL_KARMA_SERVICE = "v1/karmas";
+    public static final String URL_PAST_LIFE_SERVICE = "v1/past-life";
     public static final String QUERY_PARAM_NAME = "[name]";
 
     public static final String BAD_REQUEST_BASIC_LABEL = "BAD REQUEST - Invalid input ";
